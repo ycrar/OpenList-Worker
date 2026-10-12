@@ -34,5 +34,5 @@ jobs:
           git commit -m "Sync from GitHub: $(date)"
 
           # Add Gitee remote and force push
-          git remote add gitee ${{ vars.GITEE_REPO_URL }}
+          git remote add gitee "${{ vars.GITEE_REPO_URL }}"
           git push --force gitee new-main:main
