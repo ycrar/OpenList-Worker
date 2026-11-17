@@ -8,6 +8,7 @@
  * 自动检测环境并选择合适的模式。
  */
 import { sanitizeProxyOrigin } from "../proxy"
+import { KV_HEALTH_PROBE_KEY, readFormat } from "../config"
 import type { Driver, EnvContext } from "../types"
 
 /**
@@ -453,32 +454,79 @@ export const kvDriver: Driver = {
 
     // 模式1: Binding 模式
     if (kv) {
-      // EdgeOne KV list() 语义（依据官方 functions-kv 示例）：
-      //   page.keys -> [{ key, ttl, meta }]，page.complete 为 true 表示末页，
-      //   下一页 cursor 需手动取本页最后一个 key。
-      const keys: string[] = []
+      // 两种平台的 list() 返回形态不同，必须逐页识别（issue #125）：
+      //   Cloudflare Workers KV（KVNamespaceListResult）：
+      //     keys: [{ name, ... }]、list_complete: boolean、cursor?: string
+      //     —— 游标由服务端下发，原样回传即可；
+      //   EdgeOne KV（依据官方 functions-kv 示例）：
+      //     keys: [{ key, ttl, meta }]、complete: boolean
+      //     —— 无 cursor 字段，下一页游标取本页最后一个 key。
+      // 早期实现只按 EdgeOne 语义读 item.key / page.complete：在 Cloudflare
+      // 上两字段恒为 undefined —— keys 恒为空、complete 恒 false，且 cursor
+      // 被赋值为 ""（undefined || ""），每轮以同一游标重复拉取同一页直到
+      // guard 上限，单次 list() 消耗上千次真实 KV list 请求，直接打满
+      // Cloudflare 免费版 1000 次/天的 list 配额（issue #125）。
+      const seen = new Set<string>()
       let cursor = ""
       let complete = false
       let guard = 0
+      let prevFirstKey: string | null = null
 
       while (!complete && guard < 1000) {
         guard += 1
 
-        const page = await kv.list({ prefix, cursor, limit: 256 })
+        const page: any = await kv.list({ prefix, cursor, limit: 256 })
         const pageKeys = Array.isArray(page?.keys) ? page.keys : []
 
+        // 空页视为末页（两种平台一致，也是未知形态的兜底）
+        if (pageKeys.length === 0) break
+
+        // 名称字段：Cloudflare 为 name，EdgeOne 为 key
+        const names: string[] = []
         for (const item of pageKeys) {
-          if (item?.key) keys.push(item.key)
+          const name = typeof item?.name === "string" ? item.name : item?.key
+          if (typeof name === "string" && name.length > 0) names.push(name)
+        }
+        // 形态无法识别时中止，绝不能空转（空转 = 每轮一次真实 list 请求）
+        if (names.length === 0) break
+
+        // 重复页检测：游标未推进（平台语义变化/回传失败）时立即终止，
+        // 与 functions/kv-list 代理端的同款防护一致
+        if (prevFirstKey !== null && names[0] === prevFirstKey) {
+          console.warn("[KV] repeated page detected; stopping list pagination")
+          break
+        }
+        prevFirstKey = names[0]
+
+        for (const name of names) seen.add(name)
+
+        // 末页判定：Cloudflare list_complete / EdgeOne complete 优先；
+        // 两者都没有时以「是否有下一页游标」推进为准。
+        const listDone =
+          page?.list_complete !== undefined
+            ? Boolean(page.list_complete)
+            : page?.complete !== undefined
+              ? Boolean(page.complete)
+              : false
+        if (listDone) {
+          complete = true
+          break
         }
 
-        if (pageKeys.length > 0) {
-          cursor = pageKeys[pageKeys.length - 1].key || ""
-        }
+        // 游标：优先服务端下发的 cursor（Cloudflare）；EdgeOne 无该字段，
+        // 回退为本页最后一个 key。
+        const lastKey = names[names.length - 1]
+        const nextCursor =
+          typeof page?.cursor === "string" && page.cursor.length > 0
+            ? page.cursor
+            : lastKey
 
-        complete = Boolean(page?.complete) || pageKeys.length === 0
+        // 无游标可推进时中止：继续循环只会拉取同一页（issue #125 的配额爆炸路径）
+        if (!nextCursor || nextCursor === cursor) break
+        cursor = nextCursor
       }
 
-      return keys
+      return [...seen]
     }
 
     // 模式2: HTTP 代理模式
@@ -509,7 +557,28 @@ export const kvDriver: Driver = {
     // 模式1: Binding 模式
     if (kv) {
       try {
-        await kv.get("__health_check__")
+        // ESA wrapper 的业务 get 为兼容缓存会把底层错误映射成 null；若它提供
+        // 直连探测方法，健康检查必须绕开该容错，以免把读取故障误报成可用。
+        if (typeof kv.healthCheck === "function") {
+          await kv.healthCheck()
+        } else {
+          await kv.get(KV_HEALTH_PROBE_KEY)
+        }
+        // key 格式的 load/save 依赖 list；map 格式只读写固定的 openlist_config,
+        // 不要求 EdgeKV 暴露 list API（ESA EdgeKV 内置 API 仅提供 get/put/delete）。
+        // 只有 key 格式才探测 list，避免 map 格式部署被不支持的 list() 误判为
+        // 存储不可用（issue #159）。对 key 格式仍检查 list，防止配额耗尽/接口异常
+        // 导致 env_check 误报 ready（issue #125）。使用专用前缀，取回空页只耗 1 次。
+        // 直接复用后端的 readFormat()：健康检查与真实读写必须用同一份解析逻辑
+        // （env 优先级、缺省 map、DB_DRIVER=json 别名），复刻一份迟早漂移。
+        if (readFormat(env) === "key") {
+          if (typeof kv.list !== "function") {
+            throw new Error(
+              "KV binding does not support list(), which is required by DB_FORMAT=key",
+            )
+          }
+          await kv.list({ prefix: KV_HEALTH_PROBE_KEY, cursor: "", limit: 256 })
+        }
         return {
           driver: "kv",
           mode: "binding",

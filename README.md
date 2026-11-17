@@ -7,9 +7,10 @@
 
 <a href="https://github.com/OpenListTeam/OpenList-Worker/blob/main/LICENSE"><img src="https://img.shields.io/github/license/OpenListTeam/OpenList-Worker" alt="License" /></a>
 <a href="https://github.com/OpenListTeam/OpenList-Worker/actions/workflows/build-verify.yml"><img src="https://img.shields.io/github/actions/workflow/status/OpenListTeam/OpenList-Worker/build-verify.yml?branch=main" alt="Build status" /></a>
-<a href="https://github.com/OpenListTeam/OpenList-Worker/releases"><img src="https://img.shields.io/github/release/OpenListTeam/OpenList-Worker" alt="latest version" /></a>
 <a href="https://github.com/OpenListTeam/OpenList-Worker/discussions"><img src="https://img.shields.io/github/discussions/OpenListTeam/OpenList-Worker?color=%23ED8936" alt="discussions" /></a>
-<a href="https://github.com/OpenListTeam/OpenList-Worker/releases"><img src="https://img.shields.io/github/downloads/OpenListTeam/OpenList-Worker/total?color=%239F7AEA&logo=github" alt="Downloads" /></a>
+<a href="https://github.com/OpenListTeam/OpenList-Worker/stargazers"><img src="https://img.shields.io/github/stars/OpenListTeam/OpenList-Worker?color=%23ED8936&logo=github" alt="Stars" /></a>
+<a href="https://github.com/OpenListTeam/OpenList-Worker/forks"><img src="https://img.shields.io/github/forks/OpenListTeam/OpenList-Worker?color=%239F7AEA&logo=github" alt="Forks" /></a>
+
 
 📘 [使用文档](https://doc.oplist.org) · 🌏 [使用文档（中国大陆）](https://doc.oplist.org.cn)  · ⚖️ [使用条款](https://doc.oplist.org/terms)  · 🔒 [隐私政策](https://doc.oplist.org/privacy)
 
@@ -35,18 +36,18 @@
 <div align="center">
 
 
-| EdgeOne Makers · 国际站 | EdgeOne Makers · 中国站 | Cloudflare Workers · 全球站 |
-| :---: | :---: | :---: |
-| [![使用 EdgeOne 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?project-name=openlist-tsworker&repository-url=https://github.com/OpenListTeam/OpenList-Worker&install-command=pnpm%20install%20--no-frozen-lockfile&build-command=pnpm%20run%20build&output-directory=dist&env=JWT_SECRET) | [![使用 EdgeOne 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?project-name=openlist-tsworker&repository-url=https://github.com/OpenListTeam/OpenList-Worker&install-command=pnpm%20install%20--no-frozen-lockfile&build-command=pnpm%20run%20build&output-directory=dist&env=JWT_SECRET) | [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/OpenListTeam/OpenList-Worker) |
+| EdgeOne Makers · 国际站 | EdgeOne Makers · 中国站 | Cloudflare Workers · 全球站 | 阿里云 ESA · 中国站 |
+| :---: | :---: | :---: | :---: |
+| [![使用 EdgeOne 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?project-name=openlist-tsworker&repository-url=https://github.com/OpenListTeam/OpenList-Worker&install-command=pnpm%20install%20--no-frozen-lockfile&build-command=pnpm%20run%20build&output-directory=dist&env=JWT_SECRET) | [![使用 EdgeOne 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?project-name=openlist-tsworker&repository-url=https://github.com/OpenListTeam/OpenList-Worker&install-command=pnpm%20install%20--no-frozen-lockfile&build-command=pnpm%20run%20build&output-directory=dist&env=JWT_SECRET) | [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/OpenListTeam/OpenList-Worker) | [![使用阿里云 ESA 部署](readmes/assets/esa-deploy.svg)](https://esa.console.aliyun.com/edge/function/list) |
 
 </div>
 
 > [!IMPORTANT]
-> - 若Cloudflare提示`无法获取存储库内容`，则您需要先[Fork](https://github.com/OpenListTeam/OpenList-Worker/fork)本项目，再通过连接到Github仓库功能部署
-> - 部署完成后配置环境变量： **EdgeOne**：[国际站](https://console.edgeone.ai/makers) · [中国站](https://console.cloud.tencent.com/edgeone/makers)；**Cloudflare**：[Worker 后台](https://dash.cloudflare.com/)，环境变量：
->   - `DB_FORMAT`: 数据存储格式：`map` (默认，整对象JSON) / `key` (分key存储) / `sql` (关系表，与Go后端一致)
->   - `DB_DRIVER`: 数据库驱动：`auto` (默认，自动检测) / `blob` (EdgeOne Blob) / `cfkv` (CF KV API) / `kv` (KV binding) / `d1` (Cloudflare D1) / `mysql`
->   - 其余可选变量参考**详细部署指南**：[Cloudflare](https://doc.oplist.org/guide/installation/worker#deploy-to-cloudflare-workers) · [EdgeOne](https://doc.oplist.org/guide/installation/worker#deploy-to-edgeone) · [ESA](https://doc.oplist.org/guide/installation/worker#deploy-to-alibaba-cloud-esa)
+> - 在 Cloudflare 平台部署，您需要先 [Fork](https://github.com/OpenListTeam/OpenList-Worker/fork) 本项目，再连接到仓库部署
+> - 阿里云 ESA 请在控制台边缘计算和 AI → 函数和 Pages导入本仓库
+> - 部署时请填写 `JWT_SECRET`（≥16 随机串，用于 JWT 签名与加密）
+> - 数据存储默认自动选择平台自带的持久化后端，其余变量见 [配置变量](https://doc.oplist.org/ecosystem/official_worker/guide_env)
+> - 部署完成后首次访问站点，通过**安装向导**完成初始化并设置账号密码
 
 
 ## 功能简介
@@ -59,9 +60,9 @@ OpenList-Worker 是官方 [OpenListTeam/OpenList](https://github.com/OpenListTea
 
 内置 **78 个存储驱动**，开箱即用地挂载各类存储后端：
 
-- **国内网盘**：阿里云盘（开放平台/分享）、夸克网盘（开放平台/UC TV 版）、百度网盘（相册）、115 网盘（开放平台/分享）、123 云盘（开放平台/分享）、天翼云盘（189/PC/TV）、中国移动云盘（139/和彩云）、沃家云盘、迅雷云盘、腾讯微云、蓝奏云、PikPak（分享）、豆包网盘、光亚盘、超星小组网盘、联想 NAS 分享、Teambition 网盘、WPS 网盘、阿里文档、HalalCloud、MediaTrack 等
+- **国内网盘**：阿里云盘（开放平台/分享）、夸克网盘（开放平台/UC TV 版）、百度网盘（相册）、115 网盘（开放平台/分享）、123 云盘（开放平台/分享）、天翼云盘（189/PC/TV）、中国移动云盘（139/和彩云）、沃家云盘、迅雷云盘、腾讯微云、蓝奏云、城通网盘、PikPak（分享）、豆包网盘、光鸭云盘、超星小组网盘、联想 NAS 分享、Teambition 网盘、WPS 网盘、阿里文档、HalalCloud、MediaTrack 等
 - **国际网盘**：Google Drive（相册）、OneDrive（应用/分享链接）、Dropbox、MEGA、MediaFire、Proton Drive、Yandex Disk、Degoo、Bunny Storage、TeraBox 等
-- **对象存储**：S3 兼容（AWS/OSS/COS/MinIO 等）、又拍云 USS、Azure Blob、WebDAV、FTP、SFTP、SMB、IPFS 等
+- **对象存储**：S3 兼容（AWS/OSS/COS/MinIO 等）、Cloudflare R2（Workers Binding 直连或 S3 API）、又拍云 USS、Azure Blob、WebDAV、FTP、SFTP、SMB、IPFS 等
 - **代码托管**：GitHub、GitHub Releases、CNB Releases
 - **网盘程序**：OpenList（分享）、AList V3、Cloudreve V3/V4、Kodbox（可道云）、Seafile、Teldrive、Febbox 等
 - **其他驱动**：网易云音乐、Misskey、Emby、Cloudflare 图床等
@@ -70,31 +71,23 @@ OpenList-Worker 是官方 [OpenListTeam/OpenList](https://github.com/OpenListTea
 
 ### 核心能力
 
-- **文件浏览**：统一的目录树浏览，支持图片、视频、音频、文档、代码、压缩包等格式在线预览。
-- **上传下载**：跨存储的上传、批量下载、流式传输与直链跳转。
-- **文件分享**：生成带有效期、密码与权限控制的分享链接，支持匿名访问与目录分享。
-- **全文搜索**：在已索引的存储中快速检索文件。
-- **离线任务**：后台任务队列，支持批量操作与异步处理。
-- **外部接口**：将聚合存储以 WebDAV 或 S3 兼容协议对外暴露，便于挂载到第三方工具。
-- **MCP 服务**：提供 Model Context Protocol 端点，可被 AI 助手等客户端集成调用。
-
-### 权限管理
-
-- **权限管理**：基于角色的访问控制（RBAC），支持用户分组、目录级读写权限与配额。
-- **认证方式**：内置账号密码，支持TOTP验证、WebAuthn/FIDO登录、SSO单点登录与 LDAP 目录认证。
-- **安全加固**：JWT 会话、CSRF 防护、点击劫持防护（X-Frame-Options）、内容安全策略（CSP）。
-- **健康检查**：提供 `/health` 存活探针与 `/healthz` 就绪探针，可用于监控与告警。
-
-### 平台部署
-
-- **运行平台**：Cloudflare Workers、腾讯云 EdgeOne Makers、Vercel、Serverless  及 Node.js 容器环境。
-- **数据存储**：Cloudflare D1（SQLite）为主，同时支持 MySQL、MariaDB、PostgreSQL、SQL Server。
-- **持久缓存**：Cloudflare KV / EdgeOne Blob（可选），用于配置持久化与缓存。
-- **一键部署**：支持 EdgeOne、Cloudflare Workers 等平台的一键部署按钮+初始化。
+- **文件管理**：统一目录树浏览，图片 / 视频 / 音频 / 文档 / 代码 / 压缩包在线预览；跨存储上传、批量下载、流式传输与直链跳转；带有效期、密码与权限控制的分享链接。
+- **检索与任务**：已索引存储的全文搜索，后台任务队列支持批量与异步处理。
+- **外部接口**：WebDAV、S3 兼容协议，以及可被 AI 助手集成的 MCP 端点。
+- **访客访问**：新装默认要求登录（`guest` 账号默认禁用）。需要匿名只读时，在「用户管理」里启用 `guest` 即可；存量部署升级后保持原状。是否允许匿名只取决于 guest 账号本身是否启用（与 Go 版一致），没有额外的站点开关，也不是 Cloudflare 控制台的环境变量。
+- **权限与认证**：RBAC（用户分组、目录级读写权限、配额），账号密码 + TOTP / WebAuthn / SSO / LDAP。
+- **安全与运维**：JWT 会话、CSRF、点击劫持（X-Frame-Options）与 CSP 防护，`/health`、`/healthz` 健康探针。
+- **并发去重**：相同目录列表 / 元信息请求只向上游网盘发起一次，其余请求复用结果，减少限流与 CPU 消耗。
+- **运行平台**：Cloudflare Workers、腾讯云 EdgeOne Makers、阿里云 ESA、Vercel / AWS Lambda 与 Node.js 容器。
+- **数据存储**：Cloudflare D1（SQLite）为主，也支持 KV / Blob / Durable Objects 与外部 MySQL / MariaDB。
+- **一键部署**：支持 EdgeOne、Cloudflare Workers、阿里云 ESA 部署按钮 + 安装向导。
 
 ---
 
 ## 手动部署
+
+<details>
+<summary>展开查看前置要求、本地开发与生产部署</summary>
 
 ### 前置要求
 
@@ -107,7 +100,7 @@ OpenList-Worker 是官方 [OpenListTeam/OpenList](https://github.com/OpenListTea
 # 1. 安装依赖
 pnpm install
 
-# 2. 编辑 wrangler.jsonc / .env，配置 JWT_SECRET 与存储（KV/D1 在控制台绑定）
+# 2. 按需配置 wrangler.jsonc 中的绑定与变量（JWT_SECRET 见 .dev.vars.example）
 
 # 3. 启动开发服务器（自动拉取官方前端并运行 Worker）
 pnpm run dev:unified
@@ -119,12 +112,14 @@ pnpm run dev:worker
 ### 生产部署
 
 ```bash
-# 一键部署：确保 KV namespace 存在 → 拉取官方前端 → 部署到 Cloudflare Workers
+# 一键部署：构建前端产物 → 部署到 Cloudflare Workers（KV 绑定由 wrangler 自动预配）
 pnpm run deploy
 
-# 或直接部署 Worker（跳过 KV 检查与前端构建）
+# 或直接部署 Worker（跳过前端构建）
 pnpm run deploy:worker
 ```
+
+</details>
 
 ---
 
@@ -132,163 +127,35 @@ pnpm run deploy:worker
 
 ### 后端
 
-- **运行环境**：Cloudflare Workers（Edge Computing）
+- **运行环境**：Cloudflare Workers / EdgeOne 云函数 / 阿里云 ESA（Edge Computing）
 - **Web 框架**：Hono.js
-- **数据库**：Cloudflare D1（SQLite）/ 支持 MySQL、MariaDB、PostgreSQL、SQL Server
-- **缓存**：Cloudflare KV（可选）
+- **数据库**：Cloudflare D1（SQLite）/ KV / Blob / Durable Objects，或外部 MySQL / MariaDB
 - **语言**：TypeScript
 - **构建工具**：Wrangler、esbuild
 
 ### 前端
 
-- **框架**：React 19 + TypeScript
-- **UI 库**：Ant Design / Material-UI
+- **框架**：SolidJS + TypeScript（官方 [OpenList-Frontend](https://github.com/OpenListTeam/OpenList-Frontend)）
+- **UI 库**：Hope UI
 - **构建工具**：Vite
 
 ---
 
 
-## 配置
+## 部署配置
 
-### 环境变量
+部署完成后请设置如下变量：
 
-#### 数据库配置
+| 变量 | 默认值 | 说明 |
+| :--- | :--- | :--- |
+| `JWT_SECRET` | (无) | JWT 令牌签名密钥（≥16 字符） |
+| `DB_FORMAT` | `map` | `map`（Json）/ `key`（分 key）/ `sql`（关系表） |
+| `DB_DRIVER` | `auto` | 可选 `auto` / `blob` / `cfkv` / `kv` / `d1` / `do` / `mysql` |
+| `DB_CIPHER` | `none` | 敏感字段落盘算法，如 `aes-256-gcm` |
 
-**DB_FORMAT**（数据存储格式）
-- `map`（默认）：整对象 JSON 格式，适用于 KV/Blob 等简单存储
-- `key`：分 key 存储格式，每个实体一条记录（如 `users_1`），避免大 JSON
-- `sql`：关系数据库表格式，与 Go 后端完全一致，适用于 D1/MySQL
 
-**DB_DRIVER**（数据库驱动）
-- `auto`（默认）：自动检测可用驱动（优先级：mysql → d1 → kv → cfkv → blob → do）
-- `blob`：EdgeOne Blob Storage（SDK）/ ESA Blob（binding）
-- `cfkv`：Cloudflare KV REST API（需配置 `CF_ACCOUNT`、`CF_KV_UUID`、`CF_API_KEY`）
-- `kv`：KV 存储（binding 名固定为 `KV`；EdgeOne Node 云函数自动走 HTTP 代理模式）
-- `d1`：Cloudflare D1（SQLite）
-- `do`：Cloudflare Durable Objects（SQLite）
-- `mysql`：MySQL（仅 Node.js 容器）
 
-**DB_CIPHER**（敏感字段落盘算法，**默认不加密**）
-- `none`（默认）：不加密，敏感字段与普通 JSON 一样明文落盘
-- `aes-256-gcm`：HKDF-SHA256 派生一把 AES-256-GCM 密钥（`enc:v2:`）
-  —— 既有加密部署写入的形态，开销最低，开启加密时**推荐**
-- `aes-256-gcm-pbkdf2`：AES-256-GCM，密钥由 PBKDF2-SHA256（10 万次迭代）逐字段派生
-  （历史 `enc:v1:` envelope，抗弱口令但每次读写都很慢，仅建议用于兼容）
-- `aes-256-cbc-hmac`：AES-256-CBC + HMAC-SHA256（`enc:v3:`，Encrypt-then-MAC）
-- `chacha20-poly1305`：ChaCha20-Poly1305（`enc:v4:`，RFC 8439，纯 JS 实现；
-  WebCrypto 全平台都没有 ChaCha20，故自带实现并通过 RFC 官方向量验证）
-- `des-cbc-hmac` / `3des-cbc-hmac`：DES / 3DES-CBC + HMAC-SHA256（`enc:v5:` / `enc:v6:`）
-  —— **仅用于兼容/互操作**：单 DES 有效密钥只有 56-bit（可被暴力破解），3DES 已被
-  NIST SP 800-131A 弃用（64-bit 分组 + Sweet32）。选用时后端会打印一次性告警，
-  请勿用它们保护真实数据。
-- 别名（大小写无关）：`gcm`/`hkdf`/`v2`、`pbkdf2`/`v1`、`cbc`/`v3`、`chacha20`/`v4`、
-  `des`/`v5`、`3des`/`tripledes`/`v6`、`off`/`plain`；无法识别时告警并回退 `none`
-
-**几种算法的 CPU 特性（实测，120 字节字段，Node 22）**
-
-| 算法 | 单字段耗时 | 说明 |
-| :-- | --: | :-- |
-| `aes-256-gcm` | ~30 µs | WebCrypto 原生（调用开销为主） |
-| `chacha20-poly1305` | ~18 µs | 纯 JS，小字段下反而更快 |
-| `aes-256-cbc-hmac` | ~60 µs | 两次 WebCrypto 调用（加密 + HMAC） |
-| `des-cbc-hmac` / `3des-cbc-hmac` | ~0.26 ms | 纯 JS（crypto-js） |
-| `aes-256-gcm-pbkdf2` | ~27 ms | 每字段 10 万次 PBKDF2（历史包袱） |
-
-为此后端内置两项优化（对功能无影响）：① 密钥派生结果在**进程内缓存**，同一
-isolate 只派生一次；② **未变化字段跳过重新加密** —— 明文、算法、密钥都没变时
-直接复用上次的密文，因此「改一个设置」不会触发全库重新加密（对 PBKDF2/DES
-这类昂贵算法尤为明显）。
-
-**推荐配置组合：**
-```bash
-# Cloudflare Workers + D1（推荐）
-DB_FORMAT=sql        # 也可用 map / key
-DB_DRIVER=d1         # 需在 wrangler.jsonc 的 d1_databases 里绑定名为 DB
-
-# EdgeOne + Blob（推荐，零配置）
-DB_FORMAT=map        # 或 key
-DB_DRIVER=blob
-
-# Cloudflare Workers + KV（必须先绑定 KV，见下方【方案 A】）
-DB_FORMAT=map        # 或 key
-DB_DRIVER=kv         # 需打开 wrangler.jsonc 的 kv_namespaces，绑定名必须恰好是 KV；
-                     # 未绑定却显式写 kv 会直接报错（不做回退）
-
-# EdgeOne Node 云函数 + KV（还需额外部署 Edge Function 代理）
-DB_FORMAT=map        # 或 key
-DB_DRIVER=kv
-EO_KV_URLS=https://<你的部署域名>   # 代理地址（也可由请求 origin 自动注入）
-JWT_SECRET=<32 字符以上>           # 代理鉴权，需与 Edge Function 侧一致
-
-# 远程访问 Cloudflare KV（HTTP API，无需 binding）
-DB_FORMAT=key
-DB_DRIVER=cfkv
-CF_ACCOUNT=your_account_id
-CF_KV_UUID=your_namespace_id
-CF_API_KEY=your_api_token
-```
-
-> 不确定用哪个就保持 `DB_DRIVER=auto`（默认，自动探测）。
-> 显式指定驱动时**不做回退**：该驱动不可用会直接拒绝请求并给出可操作原因（含
-> 「自动探测会选哪个驱动」，照抄即可），`/api/public/env_check` 与
-> `/api/public/init_status` 也会显示同样的原因和一行修复建议，
-> 避免「以为在用 KV、实际写进了别的后端」。
-> 非法「驱动 × 格式」组合（如 `DB_FORMAT=sql` + `DB_DRIVER=kv`）同样只报错，
-> 不会自动改驱动或格式。
-
-**关于 DB_CIPHER 的补充说明：**
-- 加密只作用于 `storages[].addition`（网盘凭据）、敏感 `settings`、`users[].password`、
-  `users[].otp_secret`；内存中始终为明文，其余逻辑（驱动、路径解析、管理接口）不受影响。
-- **`none` 只表示「不加密数据库字段」，不影响其它任何行为**：JWT 令牌签名仍需一把
-  跨实例/跨冷启动一致的共享密钥，若未通过环境变量 `JWT_SECRET` 提供，安装向导仍会
-  自动生成并持久化 `openlist_encryption_secret`（与加密是否启用无关）。
-- 密文带版本前缀（`enc:v1:` ~ `enc:v6:`），**读取时按前缀自动识别算法**，
-  与当前配置无关。因此：
-  - 从加密切回 `none`（或升级后不再配置 `DB_CIPHER`）：既有密文仍能正常解密，
-    并在**下一次配置保存**时自动转为明文（逐字段迁移，无需任何手动步骤）；
-  - 更换算法：既有密文按旧算法解开，下次写入按新算法落盘；
-  - 既有的明文数据（无前缀）原样返回，升级不会丢数据。
-- 加密算法选择是**正交的一维**，不改变 `DB_DRIVER` / `DB_FORMAT` 的语义。
-- 取值无法识别时回退 `none` 并在日志告警（不会静默启用某个算法）；
-  `/api/public/env_check` 的 `config.db_cipher` 会回显当前生效值。
-- AES 三种算法基于 WebCrypto（各平台原生）；`chacha20-poly1305` 与 `des/3des` 因
-  WebCrypto 不提供对应算法而使用纯 JS 实现 —— 全部在 Cloudflare Workers /
-  EdgeOne Node 云函数 / ESA / Node.js 上行为一致（不依赖 `node:crypto`）。
-
-**向后兼容：**
-- `DB_DRIVER=json` 自动转换为 `DB_FORMAT=map` + 自动检测驱动
-- 未配置 `DB_CIPHER` 时**不再对敏感字段加密**（旧版本默认加密）。升级已有部署时：
-  存储中的 `enc:v1:`（PBKDF2）与 `enc:v2:`（HKDF）密文仍会按前缀自动解密、保持可读，
-  并在**下一次配置保存**时自动转为明文；如需继续加密，显式设置 `DB_CIPHER` 即可
-  （`DB_CIPHER=aes-256-gcm` 与既有加密部署的写入形态一致）。
-
-**表名对齐（仅 SQL 格式）：**
-`sql` 格式采用列式表，命名策略与 Go 后端的 GORM 一致（snake_case + 复数表名 + 前缀）：
-
-| Go 结构体     | 表名                |
-| :------------ | :------------------ |
-| `SettingItem` | `x_setting_items`   |
-| `SharingDB`   | `x_sharing_dbs`     |
-| `Storage`     | `x_storages`        |
-| `User`        | `x_users`           |
-| `Meta`        | `x_metas`           |
-| （仅 TS）     | `x_plugins`         |
-
-前缀固定为 `x_`（与 Go 后端默认值一致）。要与 Go 后端共享同一物理数据库，无需额外配置。
-
-#### 安全配置
-
-- `JWT_SECRET`：JWT 令牌签名密钥（必填），**同时用作可选的字段加密密钥**与定时任务鉴权
-- `DB_CIPHER`：敏感字段落盘算法（可选，默认 `none` 不加密）：`none` / `aes-256-gcm`
-  （推荐）/ `aes-256-gcm-pbkdf2` / `aes-256-cbc-hmac` / `chacha20-poly1305` /
-  `des-cbc-hmac` / `3des-cbc-hmac`（后两者仅兼容用途，不安全）
-- `ADMIN_PASS`：初始管理员密码（可选，设置后跳过安装向导自动初始化 admin）
-
-#### 其他配置
-
-详细配置说明请参考 [官方文档](https://doc.oplist.org/guide/configuration)
-
----
+完整环境变量，请参阅[配置变量](https://doc.oplist.org/ecosystem/official_worker/guide_env)
 
 
 ## 帮助支持
